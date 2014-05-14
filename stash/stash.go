@@ -1,0 +1,38 @@
+package stash
+
+import (
+	"errors"
+)
+
+var (
+	ErrNilClient = errors.New("client is nil")
+)
+
+// New creates an instance of the Stash Client
+func New(apiUrl, consumerSecret, accessToken, tokenSecret string) *Client {
+	c := &Client{}
+	c.ApiUrl = apiUrl
+	c.ConsumerKey = "dont't care"
+	c.ConsumerSecret = consumerSecret
+	c.AccessToken = accessToken
+	c.TokenSecret = tokenSecret
+
+	c.Repos = &RepoResource{c}
+	c.Users = &UserResource{c}
+	return c
+}
+
+type Client struct {
+	ApiUrl         string
+	ConsumerKey    string
+	ConsumerSecret string
+	AccessToken    string
+	TokenSecret    string
+
+	Repos *RepoResource
+	Users *UserResource
+}
+
+// Guest Client that can be used to access
+// public APIs that do not require authentication.
+var Guest = New("", "", "", "")
