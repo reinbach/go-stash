@@ -36,7 +36,7 @@ func (r *RepoResource) CreateHook(project, slug, hook string) (*Repo, error) {
 	path := fmt.Sprintf("/projects/%s/repos/%s/settings/hooks/%s/enabled",
 		project, slug, hook)
 
-	if err := r.clent.do("GET", path, nil, nil&repo); err != nil {
+	if err := r.client.do("GET", path, nil, nil, &repo); err != nil {
 		return nil, err
 	}
 
