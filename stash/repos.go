@@ -11,6 +11,7 @@ type Project struct {
 type Repo struct {
 	Name    string `"json:name"`
 	Slug    string `"json:slug"`
+	Public  bool   `"json:public"`
 	Project *Project
 }
 

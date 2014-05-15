@@ -9,11 +9,11 @@ var (
 )
 
 // New creates an instance of the Stash Client
-func New(apiUrl, consumerSecret, accessToken, tokenSecret string) *Client {
+func New(apiUrl, consumerKey, accessToken, tokenSecret string) *Client {
 	c := &Client{}
 	c.ApiUrl = apiUrl
-	c.ConsumerKey = "dont't care"
-	c.ConsumerSecret = consumerSecret
+	c.ConsumerKey = consumerKey
+	c.ConsumerSecret = "dont't care"
 	c.AccessToken = accessToken
 	c.TokenSecret = tokenSecret
 
