@@ -12,7 +12,8 @@ type Author struct {
 type Commit struct {
 	Hash      string `"json:id"`
 	Author    *Author
-	Timestamp int64 `"json:authorTimestamp"`
+	Timestamp string `"json:authorTimestamp"`
+	Message   string `"json:message"`
 }
 
 type CommitResource struct {
@@ -20,7 +21,7 @@ type CommitResource struct {
 }
 
 //Get commit data for commit hash
-func (r *CommitResource) Get(apiUrl, project, slug, commitId string) (*Commit, error) {
+func (r *CommitResource) Get(project, slug, commitId string) (*Commit, error) {
 	commit := Commit{}
 	path := fmt.Sprintf("/projects/%s/repos/%s/commits/%s", project, slug,
 		commitId)
