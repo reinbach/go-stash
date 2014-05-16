@@ -22,6 +22,7 @@ func New(apiUrl, consumerKey, accessToken, tokenSecret string) *Client {
 	c.Branches = &BranchResource{c}
 	c.Commits = &CommitResource{c}
 	c.Contents = &ContentResource{c}
+	c.Hooks = &HookResource{c}
 	return c
 }
 
@@ -37,6 +38,7 @@ type Client struct {
 	Branches *BranchResource
 	Commits  *CommitResource
 	Contents *ContentResource
+	Hooks    *HookResource
 }
 
 // Guest Client that can be used to access
