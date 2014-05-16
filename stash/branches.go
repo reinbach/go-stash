@@ -10,7 +10,7 @@ type Branch struct {
 }
 
 type Branches struct {
-	Branch []*Branch `"json:values"`
+	Branches []*Branch `"json:values"`
 }
 
 type BranchResource struct {
@@ -18,7 +18,7 @@ type BranchResource struct {
 }
 
 // Get list of branches for repo
-func (r *BranchResource) List(apiUrl, project, slug string) (*Branches, error) {
+func (r *BranchResource) List(project, slug string) ([]*Branch, error) {
 	branches := Branches{}
 	path := fmt.Sprintf("/projects/%s/repos/%s/branches", project, slug)
 
@@ -26,5 +26,5 @@ func (r *BranchResource) List(apiUrl, project, slug string) (*Branches, error) {
 		return nil, err
 	}
 
-	return &branches, nil
+	return branches.Branches, nil
 }
