@@ -19,6 +19,8 @@ func New(apiUrl, consumerKey, accessToken, tokenSecret string) *Client {
 
 	c.Repos = &RepoResource{c}
 	c.Users = &UserResource{c}
+	c.Branches = &BranchResource{c}
+	c.Commits = &CommitResource{c}
 	return c
 }
 
@@ -29,8 +31,10 @@ type Client struct {
 	AccessToken    string
 	TokenSecret    string
 
-	Repos *RepoResource
-	Users *UserResource
+	Repos    *RepoResource
+	Users    *UserResource
+	Branches *BranchResource
+	Commits  *CommitResource
 }
 
 // Guest Client that can be used to access
