@@ -1,10 +1,15 @@
 package oauth1
 
 import (
-	"crypto/hmac"
+	"crypto"
+	crand "crypto/rand"
+	"crypto/rsa"
 	"crypto/sha1"
+	"crypto/x509"
 	"encoding/base64"
+	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -30,6 +35,9 @@ type Consumer struct {
 	// A secret used by the Consumer to establish
 	// ownership of the Consumer Key.
 	ConsumerSecret string
+
+	// A path to the private pem key used to sign request
+	ConsumerPrivateKeyPem string
 
 	// An absolute URL to which the Service Provider will redirect
 	// the User back when the Obtaining User Authorization step
@@ -158,7 +166,7 @@ func (c *Consumer) SignParams(req *http.Request, token Token, params map[string]
 	//params["oauth_token"]            = token.Token()
 	params["oauth_consumer_key"] = c.ConsumerKey
 	params["oauth_nonce"] = nonce()
-	params["oauth_signature_method"] = "HMAC-SHA1"
+	params["oauth_signature_method"] = "RSA-SHA1"
 	params["oauth_timestamp"] = timestamp()
 	params["oauth_version"] = "1.0"
 
@@ -175,14 +183,15 @@ func (c *Consumer) SignParams(req *http.Request, token Token, params map[string]
 		params[k] = queryParams.Get(k)
 	}
 
-	var tokenSecret string
+	//var tokenSecret string
 	if token != nil {
-		tokenSecret = token.Secret()
+		//tokenSecret = token.Secret()
 		params["oauth_token"] = token.Token()
 	}
 
 	// create the oauth signature
-	key := escape(c.ConsumerSecret) + "&" + escape(tokenSecret)
+	//key := escape(c.ConsumerSecret) + "&" + escape(tokenSecret)
+	key := c.ConsumerPrivateKeyPem
 	base := requestString(req.Method, req.URL.String(), params)
 	params["oauth_signature"] = sign(base, key)
 
@@ -230,13 +239,22 @@ func timestamp() string {
 	return strconv.FormatInt(time.Now().Unix(), 10)
 }
 
-// Generates an HMAC Signature for an OAuth1.0a request.
+// Generates an RSA SHA1 Signature for an OAuth1.0a request.
 func sign(message, key string) string {
-	hashfun := hmac.New(sha1.New, []byte(key))
+	privateKeyBytes, _ := ioutil.ReadFile(key)
+	block, _ := pem.Decode(privateKeyBytes)
+	privateInterface, _ := x509.ParsePKCS8PrivateKey(block.Bytes)
+	privateKey, _ := privateInterface.(*rsa.PrivateKey)
+
+	hashfun := sha1.New()
 	hashfun.Write([]byte(message))
 	rawsignature := hashfun.Sum(nil)
-	base64signature := make([]byte, base64.StdEncoding.EncodedLen(len(rawsignature)))
-	base64.StdEncoding.Encode(base64signature, rawsignature)
+
+	cipher, _ := rsa.SignPKCS1v15(crand.Reader, privateKey, crypto.SHA1,
+		rawsignature)
+
+	base64signature := make([]byte, base64.StdEncoding.EncodedLen(len(cipher)))
+	base64.StdEncoding.Encode(base64signature, cipher)
 
 	return string(base64signature)
 }
@@ -246,7 +264,7 @@ func headers(consumerKey string) map[string]string {
 	return map[string]string{
 		"oauth_consumer_key":     consumerKey,
 		"oauth_nonce":            nonce(),
-		"oauth_signature_method": "HMAC-SHA1",
+		"oauth_signature_method": "RSA-SHA1",
 		"oauth_timestamp":        timestamp(),
 		"oauth_version":          "1.0",
 	}

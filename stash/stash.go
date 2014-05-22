@@ -9,11 +9,12 @@ var (
 )
 
 // New creates an instance of the Stash Client
-func New(apiUrl, consumerKey, accessToken, tokenSecret string) *Client {
+func New(apiUrl, consumerKey, accessToken, tokenSecret, privateKey string) *Client {
 	c := &Client{}
 	c.ApiUrl = apiUrl
 	c.ConsumerKey = consumerKey
 	c.ConsumerSecret = "dont't care"
+	c.ConsumerPrivateKeyPem = privateKey
 	c.AccessToken = accessToken
 	c.TokenSecret = tokenSecret
 
@@ -27,11 +28,12 @@ func New(apiUrl, consumerKey, accessToken, tokenSecret string) *Client {
 }
 
 type Client struct {
-	ApiUrl         string
-	ConsumerKey    string
-	ConsumerSecret string
-	AccessToken    string
-	TokenSecret    string
+	ApiUrl                string
+	ConsumerKey           string
+	ConsumerSecret        string
+	ConsumerPrivateKeyPem string
+	AccessToken           string
+	TokenSecret           string
 
 	Repos    *RepoResource
 	Users    *UserResource
@@ -43,4 +45,4 @@ type Client struct {
 
 // Guest Client that can be used to access
 // public APIs that do not require authentication.
-var Guest = New("", "", "", "")
+var Guest = New("", "", "", "", "")

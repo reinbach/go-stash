@@ -50,8 +50,9 @@ func (c *Client) do(method string, path string, params url.Values, values url.Va
 
 	// create the client
 	var client = oauth1.Consumer{
-		ConsumerKey:    c.ConsumerKey,
-		ConsumerSecret: c.ConsumerSecret,
+		ConsumerKey:           c.ConsumerKey,
+		ConsumerSecret:        c.ConsumerSecret,
+		ConsumerPrivateKeyPem: c.ConsumerPrivateKeyPem,
 	}
 
 	// create the URI

@@ -26,12 +26,14 @@ var (
 	// A valid access token issues for the `testUser` and `consumerKey`
 	accessToken string
 	tokenSecret string
+	privateKey  string
 )
 
 func init() {
 	consumerKey = os.Getenv("S_CONSUMER_KEY")
 	accessToken = os.Getenv("S_ACCESS_TOKEN")
 	tokenSecret = os.Getenv("S_TOKEN_SECRET")
+	privateKey = os.Getenv("S_PRIVATE_KEY")
 	testUser = os.Getenv("S_USER")
 	testRepo = os.Getenv("S_REPO")
 
@@ -51,5 +53,5 @@ func init() {
 	}
 
 	client = New("http://api.example.com", consumerSecret, accessToken,
-		tokenSecret)
+		tokenSecret, privateKey)
 }
