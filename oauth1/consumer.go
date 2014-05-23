@@ -163,7 +163,7 @@ func (c *Consumer) SignParams(req *http.Request, token Token, params map[string]
 	}
 
 	// ensure default parameters are set
-	//params["oauth_token"]            = token.Token()
+	//params["oauth_token"] = token.Token()
 	params["oauth_consumer_key"] = c.ConsumerKey
 	params["oauth_nonce"] = nonce()
 	params["oauth_signature_method"] = "RSA-SHA1"
@@ -215,7 +215,7 @@ func (c *Consumer) SignParams(req *http.Request, token Token, params map[string]
 	// ensure the appropriate content-type is set for POST,
 	// assuming the field is not populated
 	if (req.Method == "POST" || req.Method == "PUT") && len(req.Header.Get("Content-Type")) == 0 {
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("Content-Type", "application/json")
 	}
 
 	return nil
