@@ -2,6 +2,7 @@ package stash
 
 import (
 	"errors"
+	"fmt"
 )
 
 var (
@@ -11,7 +12,7 @@ var (
 // New creates an instance of the Stash Client
 func New(apiUrl, consumerKey, accessToken, tokenSecret, privateKey string) *Client {
 	c := &Client{}
-	c.ApiUrl = apiUrl
+	c.ApiUrl = fmt.Sprintf("%s/rest/api/1.0", apiUrl)
 	c.ConsumerKey = consumerKey
 	c.ConsumerSecret = "dont't care"
 	c.ConsumerPrivateKeyPem = privateKey
@@ -19,7 +20,6 @@ func New(apiUrl, consumerKey, accessToken, tokenSecret, privateKey string) *Clie
 	c.TokenSecret = tokenSecret
 
 	c.Repos = &RepoResource{c}
-	c.Users = &UserResource{c}
 	c.Branches = &BranchResource{c}
 	c.Commits = &CommitResource{c}
 	c.Contents = &ContentResource{c}
@@ -36,7 +36,6 @@ type Client struct {
 	TokenSecret           string
 
 	Repos    *RepoResource
-	Users    *UserResource
 	Branches *BranchResource
 	Commits  *CommitResource
 	Contents *ContentResource

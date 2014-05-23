@@ -39,7 +39,7 @@ var (
 // the exception overriding for mock unit testing.
 var DefaultClient = http.DefaultClient
 
-func (c *Client) do(method string, path string, params url.Values, values url.Values, v interface{}) error {
+func (c *Client) do(method string, path string, params url.Values, values []byte, v interface{}) error {
 
 	// if this is the guest client then we don't need
 	// to sign the request ... we will execute just
@@ -78,14 +78,9 @@ func (c *Client) do(method string, path string, params url.Values, values url.Va
 	}
 
 	if values != nil && len(values) > 0 {
-		body := []byte(values.Encode())
-		buf := bytes.NewBuffer(body)
+		buf := bytes.NewBuffer(values)
 		req.Body = ioutil.NopCloser(buf)
 	}
-
-	// add the Form data to the request
-	// (we'll need this in order to sign the request)
-	req.Form = values
 
 	// sign the request
 	if err := client.Sign(req, token); err != nil {
@@ -125,7 +120,7 @@ func (c *Client) do(method string, path string, params url.Values, values url.Va
 	return nil
 }
 
-func (c *Client) guest(method string, path string, params url.Values, values url.Values, v interface{}) error {
+func (c *Client) guest(method string, path string, params url.Values, values []byte, v interface{}) error {
 
 	// create the URI
 	uri, err := url.Parse(c.ApiUrl + path)
@@ -148,8 +143,7 @@ func (c *Client) guest(method string, path string, params url.Values, values url
 
 	// add the Form values to the body
 	if values != nil && len(values) > 0 {
-		body := []byte(values.Encode())
-		buf := bytes.NewBuffer(body)
+		buf := bytes.NewBuffer(values)
 		req.Body = ioutil.NopCloser(buf)
 	}
 
