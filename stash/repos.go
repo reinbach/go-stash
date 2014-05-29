@@ -25,7 +25,7 @@ func (r *RepoResource) Find(project, slug string) (*Repo, error) {
 	repo := Repo{}
 	path := fmt.Sprintf("/projects/%s/repos/%s", project, slug)
 
-	if err := r.client.do("GET", path, nil, nil, &repo); err != nil {
+	if err := r.client.do("GET", "core", path, nil, nil, &repo); err != nil {
 		return nil, err
 	}
 

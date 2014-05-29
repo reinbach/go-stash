@@ -39,7 +39,7 @@ var (
 // the exception overriding for mock unit testing.
 var DefaultClient = http.DefaultClient
 
-func (c *Client) do(method string, path string, params url.Values, values []byte, v interface{}) error {
+func (c *Client) do(method, api, path string, params url.Values, values []byte, v interface{}) error {
 
 	// if this is the guest client then we don't need
 	// to sign the request ... we will execute just
@@ -56,7 +56,8 @@ func (c *Client) do(method string, path string, params url.Values, values []byte
 	}
 
 	// create the URI
-	uri, err := url.Parse(c.ApiUrl + path)
+	apiUrl := c.GetFullApiUrl(api)
+	uri, err := url.Parse(apiUrl + path)
 	if err != nil {
 		return err
 	}

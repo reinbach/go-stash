@@ -12,7 +12,7 @@ var (
 // New creates an instance of the Stash Client
 func New(apiUrl, consumerKey, accessToken, tokenSecret, privateKey string) *Client {
 	c := &Client{}
-	c.ApiUrl = fmt.Sprintf("%s/rest/api/1.0", apiUrl)
+	c.ApiUrl = apiUrl
 	c.ConsumerKey = consumerKey
 	c.ConsumerSecret = "dont't care"
 	c.ConsumerPrivateKeyPem = privateKey
@@ -24,6 +24,8 @@ func New(apiUrl, consumerKey, accessToken, tokenSecret, privateKey string) *Clie
 	c.Commits = &CommitResource{c}
 	c.Contents = &ContentResource{c}
 	c.Hooks = &HookResource{c}
+	c.RepoKeys = &RepoKeyResource{c}
+	c.Keys = &KeyResource{c}
 	return c
 }
 
@@ -40,8 +42,24 @@ type Client struct {
 	Commits  *CommitResource
 	Contents *ContentResource
 	Hooks    *HookResource
+	RepoKeys *RepoKeyResource
+	Keys     *KeyResource
 }
 
 // Guest Client that can be used to access
 // public APIs that do not require authentication.
 var Guest = New("", "", "", "", "")
+
+func (c *Client) GetFullApiUrl(api string) string {
+	var url string
+	switch api {
+	case "keys":
+		url = fmt.Sprintf("%s/rest/keys/1.0", c.ApiUrl)
+	case "ssh":
+		url = fmt.Sprintf("%s/rest/ssh/1.0", c.ApiUrl)
+	case "core":
+		url = fmt.Sprintf("%s/rest/api/1.0", c.ApiUrl)
+	}
+
+	return url
+}

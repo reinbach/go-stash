@@ -25,7 +25,7 @@ func (r *ContentResource) Find(project, slug, path string) (string, error) {
 	url_path := fmt.Sprintf("/projects/%s/repos/%s/browse/%s", project,
 		slug, path)
 
-	if err := r.client.do("GET", url_path, nil, nil, &content); err != nil {
+	if err := r.client.do("GET", "core", url_path, nil, nil, &content); err != nil {
 		return "", err
 	}
 

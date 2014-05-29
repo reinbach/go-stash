@@ -22,7 +22,7 @@ func (r *BranchResource) List(project, slug string) ([]*Branch, error) {
 	branches := Branches{}
 	path := fmt.Sprintf("/projects/%s/repos/%s/branches", project, slug)
 
-	if err := r.client.do("GET", path, nil, nil, &branches); err != nil {
+	if err := r.client.do("GET", "core", path, nil, nil, &branches); err != nil {
 		return nil, err
 	}
 

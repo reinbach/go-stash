@@ -26,7 +26,7 @@ func (r *CommitResource) Get(project, slug, commitId string) (*Commit, error) {
 	path := fmt.Sprintf("/projects/%s/repos/%s/commits/%s", project, slug,
 		commitId)
 
-	if err := r.client.do("GET", path, nil, nil, &commit); err != nil {
+	if err := r.client.do("GET", "core", path, nil, nil, &commit); err != nil {
 		return nil, err
 	}
 
