@@ -192,7 +192,8 @@ func (c *Consumer) SignParams(req *http.Request, token Token, params map[string]
 	// create the oauth signature
 	//key := escape(c.ConsumerSecret) + "&" + escape(tokenSecret)
 	key := c.ConsumerPrivateKeyPem
-	base := requestString(req.Method, req.URL.String(), params)
+	url := fmt.Sprintf("%s://%s%s", req.URL.Scheme, req.URL.Host, req.URL.Path)
+	base := requestString(req.Method, url, params)
 	params["oauth_signature"] = sign(base, key)
 
 	//HACK: we were previously including params in the Authorization
