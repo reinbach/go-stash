@@ -26,6 +26,7 @@ func New(apiUrl, consumerKey, accessToken, tokenSecret, privateKey string) *Clie
 	c.Hooks = &HookResource{c}
 	c.RepoKeys = &RepoKeyResource{c}
 	c.Keys = &KeyResource{c}
+	c.Users = &UserResource{c}
 	return c
 }
 
@@ -44,6 +45,7 @@ type Client struct {
 	Hooks    *HookResource
 	RepoKeys *RepoKeyResource
 	Keys     *KeyResource
+	Users    *UserResource
 }
 
 // Guest Client that can be used to access

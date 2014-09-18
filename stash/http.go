@@ -40,6 +40,12 @@ var (
 var DefaultClient = http.DefaultClient
 
 func (c *Client) do(method, api, path string, params url.Values, values []byte, v interface{}) error {
+	// Sad hack to get username
+	var username = false
+	if path == "username" {
+		username = true
+		path = "/repos"
+	}
 
 	// if this is the guest client then we don't need
 	// to sign the request ... we will execute just
@@ -115,6 +121,13 @@ func (c *Client) do(method, api, path string, params url.Values, values []byte, 
 
 	// Unmarshall the JSON response
 	if v != nil {
+		// If looking for username then pull that from header
+		if username {
+			body, err = json.Marshal(map[string]string{"username": resp.Header["X-Ausername"][0]})
+			if err != nil {
+				return nil
+			}
+		}
 		return json.Unmarshal(body, v)
 	}
 
