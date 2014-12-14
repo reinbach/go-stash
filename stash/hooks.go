@@ -32,13 +32,6 @@ func (r *RepoResource) CreateHook(project, slug, hook_key, link string) (*Hook, 
 	}
 
 	hook := Hook{}
-	enablePath := fmt.Sprintf("/projects/%s/repos/%s/settings/hooks/%s/enabled",
-		project, slug, hook_key)
-
-	// Enable hook
-	if err := r.client.do("PUT", "core", enablePath, nil, nil, &hook); err != nil {
-		return nil, err
-	}
 
 	// Set hook
 	updatePath := fmt.Sprintf("/projects/%s/repos/%s/settings/hooks/%s/settings",
@@ -46,6 +39,14 @@ func (r *RepoResource) CreateHook(project, slug, hook_key, link string) (*Hook, 
 	if err := r.client.do("PUT", "core", updatePath, nil, values, &hook); err != nil {
 		return nil, err
 	}
+
+	// Enable hook
+	enablePath := fmt.Sprintf("/projects/%s/repos/%s/settings/hooks/%s/enabled",
+		project, slug, hook_key)
+	if err := r.client.do("PUT", "core", enablePath, nil, values, &hook); err != nil {
+		return nil, err
+	}
+
 
 	return &hook, nil
 }
