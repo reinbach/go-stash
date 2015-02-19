@@ -43,10 +43,10 @@ Setup Enviroment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     export STASH_URL="<stash_url>"
-    export STASH_CONSUMER_KEY="<consumer_key>"
-    export STASH_HOOK="de.aeffle.stash.plugin.stash-http-get-post-receive-hook"
+    export STASH_PROJECT="<stash_project>"
+    export STASH_REPO="<stash_repo>"
     export STASH_USER="<stash_user>"
     export STASH_PASSWORD="<stash_password>"
-    export STASH_REPO_PROJECT="<stash_project>"
-    export STASH_REPO_NAME="<stash_repo>"
+    export STASH_CONSUMER_KEY="<consumer_key>"
+    export STASH_HOOK="de.aeffle.stash.plugin.stash-http-get-post-receive-hook"
     export STASH_PRIVATE_KEY="<stash_private_key>"
