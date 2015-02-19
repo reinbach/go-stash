@@ -41,12 +41,34 @@ func (r *RepoResource) CreateHook(project, slug, hook_key, link string) (*Hook, 
 	}
 
 	// Enable hook
-	enablePath := fmt.Sprintf("/projects/%s/repos/%s/settings/hooks/%s/enabled",
-		project, slug, hook_key)
+	enablePath := GetEnablePath(project, slug, hook_key)
 	if err := r.client.do("PUT", "core", enablePath, nil, values, &hook); err != nil {
 		return nil, err
 	}
 
-
 	return &hook, nil
+}
+
+// Disable hook for named repository
+func (r *RepoResource) DeleteHook(project, slug, hook_key, link string) error {
+	hookConfig := map[string]string{"url": link}
+	values, err := json.Marshal(hookConfig)
+	if err != nil {
+		return err
+	}
+
+	hook := Hook{}
+
+	enablePath := GetEnablePath(project, slug, hook_key)
+	if err := r.client.do("DELETE", "core", enablePath, nil, values, &hook); err != nil {
+		return err
+	}
+
+	// TODO check that enabled is False?
+	return nil
+}
+
+func GetEnablePath(project, slug, hook_key string) string {
+	return fmt.Sprintf("/projects/%s/repos/%s/settings/hooks/%s/enabled",
+		project, slug, hook_key)
 }
