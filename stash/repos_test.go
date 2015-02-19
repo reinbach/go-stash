@@ -5,8 +5,7 @@ import (
 )
 
 func Test_Repos(t *testing.T) {
-	// FIND the named repo
-	repo, err := client.Repos.Find(testUser, testRepo)
+	repo, err := client.Repos.Find(testProject, testRepo)
 	if err != nil {
 		t.Error(err)
 	}
