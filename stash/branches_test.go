@@ -9,8 +9,12 @@ func TestBranchesList(t *testing.T) {
 	if err != nil {
 		t.Errorf("Did not expect an error, got: %v", err)
 	}
-	if len(branches) != 0 {
-		t.Errorf("Expected 0 branches, got: %v", len(branches))
+	if len(branches) != 1 {
+		t.Errorf("Expected 1 branch, got: %v", len(branches))
+	}
+	branch := branches[0]
+	if branch.DisplayID != "master" {
+		t.Errorf("Expected `master` branch name: got `%v`", branch.DisplayID)
 	}
 }
 

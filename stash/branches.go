@@ -6,11 +6,12 @@ import (
 
 type Branch struct {
 	ID         string `"json:id"`
+	DisplayID  string `"json:displayId"`
 	LatestHash string `"json:latestChangeset"`
 }
 
 type Branches struct {
-	Branches []*Branch `"json:values"`
+	Values []Branch `"json:values"`
 }
 
 type BranchResource struct {
@@ -18,7 +19,7 @@ type BranchResource struct {
 }
 
 // Get list of branches for repo
-func (r *BranchResource) List(project, slug string) ([]*Branch, error) {
+func (r *BranchResource) List(project, slug string) ([]Branch, error) {
 	branches := Branches{}
 	path := fmt.Sprintf("/projects/%s/repos/%s/branches", project, slug)
 
@@ -26,5 +27,5 @@ func (r *BranchResource) List(project, slug string) ([]*Branch, error) {
 		return nil, err
 	}
 
-	return branches.Branches, nil
+	return branches.Values, nil
 }
