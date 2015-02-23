@@ -9,29 +9,34 @@ import (
 )
 
 var (
+	testURL     string
 	privateKey  string
 	consumerKey string
-	c           Consumer
+	consumer    Consumer
 )
 
 func init() {
+	testURL = os.Getenv("STASH_URL")
 	consumerKey = os.Getenv("STASH_CONSUMER_KEY")
 	privateKey = os.Getenv("STASH_PRIVATE_KEY")
 
 	switch {
+	case len(testURL) == 0:
+		panic(errors.New("must set the STASH_URL environment variable"))
 	case len(consumerKey) == 0:
 		panic(errors.New("must set the STASH_CONSUMER_KEY environment variable"))
 	case len(privateKey) == 0:
 		panic(errors.New("must set the STASH_PRIVATE_KEY environment variable"))
 	}
 
-	c = Consumer{
+	consumer = Consumer{
+		RequestTokenURL:       testURL + "/plugins/servlet/oauth/request-token",
+		AuthorizationURL:      testURL + "/plugins/servlet/oauth/authorize",
+		AccessTokenURL:        testURL + "/plugins/servlet/oauth/access-token",
+		CallbackURL:           OOB,
 		ConsumerKey:           consumerKey,
-		ConsumerSecret:        "",
 		ConsumerPrivateKeyPem: privateKey,
-		RequestTokenURL:       OOB,
 	}
-
 }
 
 // Test Nonce
@@ -79,12 +84,12 @@ func TestSignParams(t *testing.T) {
 	oauth_params["test"] = "world"
 
 	token := NewAccessToken(oauth_token, oauth_secret, oauth_params)
-	err := c.SignParams(r, token, nil)
+	err := consumer.SignParams(r, token, nil)
 	if err != nil {
 		t.Errorf("SignParams error'd out: ", err)
 	}
 
-	err = c.SignParams(r, token, oauth_params)
+	err = consumer.SignParams(r, token, oauth_params)
 	if err != nil {
 		t.Errorf("SignParams error'd out: ", err)
 	}
@@ -96,7 +101,7 @@ func TestSignParamsQueryParams(t *testing.T) {
 	oauth_secret := "o-secret"
 
 	token := NewAccessToken(oauth_token, oauth_secret, nil)
-	err := c.SignParams(r, token, nil)
+	err := consumer.SignParams(r, token, nil)
 	if err != nil {
 		t.Errorf("SignParams error'd out: ", err)
 	}
@@ -109,7 +114,7 @@ func TestSignParamsNoHeader(t *testing.T) {
 	oauth_secret := "o-secret"
 
 	token := NewAccessToken(oauth_token, oauth_secret, nil)
-	err := c.SignParams(r, token, nil)
+	err := consumer.SignParams(r, token, nil)
 	if err != nil {
 		t.Errorf("SignParams error'd out: ", err)
 	}
@@ -122,7 +127,7 @@ func TestSignParamsPost(t *testing.T) {
 	oauth_secret := "o-secret"
 
 	token := NewAccessToken(oauth_token, oauth_secret, nil)
-	err := c.SignParams(r, token, nil)
+	err := consumer.SignParams(r, token, nil)
 	if err != nil {
 		t.Errorf("SignParams error'd out: ", err)
 	}
@@ -139,7 +144,7 @@ func TestConsumerSign(t *testing.T) {
 	oauth_secret := "o-secret"
 
 	token := NewAccessToken(oauth_token, oauth_secret, nil)
-	err := c.Sign(r, token)
+	err := consumer.Sign(r, token)
 	if err != nil {
 		t.Errorf("Sign error'd out: ", err)
 	}
@@ -165,5 +170,43 @@ func TestIsEscapable(t *testing.T) {
 	}
 	if isEscapable(" "[0]) == false {
 		t.Error("' ' should be escapable")
+	}
+}
+
+func TestRequestToken(t *testing.T) {
+	requestToken, err := consumer.RequestToken()
+	if err != nil {
+		t.Error("Did not expect error on `consumer.RequestToken()`")
+	}
+	if requestToken.Token() == "" {
+		t.Errorf("Expected oauth_token, got nothing")
+	}
+	if requestToken.Secret() == "" {
+		t.Errorf("Expected oauth_token_secret, got nothing")
+	}
+}
+
+func TestAuthorizeRedirect(t *testing.T) {
+	requestToken, err := consumer.RequestToken()
+	if err != nil {
+		t.Error("Did not expect error on `consumer.RequestToken()`")
+	}
+	uri, err := consumer.AuthorizeRedirect(requestToken)
+	if err != nil {
+		t.Error("Did not expect error on `consumer.AuthorizeRedirect()`")
+	}
+	if uri == "" {
+		t.Errorf("Expected URI, instead got nothing")
+	}
+}
+
+func TestAuthorizeToken(t *testing.T) {
+	requestToken, err := consumer.RequestToken()
+	accessToken, err := consumer.AuthorizeToken(requestToken, "wrong")
+	if err == nil {
+		t.Errorf("Expected error on `consumer.AuthorizeToken()`")
+	}
+	if accessToken != nil {
+		t.Errorf("Expected no accessToken, got %v instead", accessToken)
 	}
 }
