@@ -7,3 +7,6 @@ test:
 
 cov:
 	@go tool cover -html coverage.out
+
+auth:
+	@go run auth.go
