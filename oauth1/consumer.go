@@ -10,6 +10,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -242,7 +243,10 @@ func timestamp() string {
 
 // Generates an RSA SHA1 Signature for an OAuth1.0a request.
 func sign(message, key string) string {
-	privateKeyBytes, _ := ioutil.ReadFile(key)
+	privateKeyBytes, err := ioutil.ReadFile(key)
+	if err != nil {
+		log.Fatal("Issue reading key: ", key)
+	}
 	block, _ := pem.Decode(privateKeyBytes)
 	privateInterface, _ := x509.ParsePKCS8PrivateKey(block.Bytes)
 	privateKey, _ := privateInterface.(*rsa.PrivateKey)
