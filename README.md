@@ -16,7 +16,7 @@ If you use the above Stash instance, then access the Stash instance at `http://l
 
 #### Setup Test Project and Repo
 
-Setup a test project and repo.
+Setup a test project and repo, and add at least one commit in branch labeled `master`.
 
 #### Install Add On
 
