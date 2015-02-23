@@ -54,7 +54,7 @@ Follow the instructions provided and you will be provided with `STASH_ACCESS_TOK
     export STASH_USER="<stash_user>"
     export STASH_PASSWORD="<stash_password>"
     export STASH_CONSUMER_KEY="<consumer_key>"
-    export STASH_HOOK="de.aeffle.stash.plugin.stash-http-get-post-receive-hook"
+    export STASH_HOOK="de.aeffle.stash.plugin.stash-http-get-post-receive-hook%3Ahttp-get-post-receive-hook"
     export STASH_PRIVATE_KEY="<stash_private_key>"
     export STASH_ACCESS_TOKEN="<stash_access_token>"
     export STASH_ACCESS_SECRET="<stash_access_secret>"

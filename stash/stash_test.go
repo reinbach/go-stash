@@ -17,6 +17,7 @@ var (
 	privateKey   string
 	accessKey    string
 	accessSecret string
+	hookKey      string
 	client       *Client
 )
 
@@ -30,6 +31,7 @@ func init() {
 	privateKey = os.Getenv("STASH_PRIVATE_KEY")
 	accessKey = os.Getenv("STASH_ACCESS_TOKEN")
 	accessSecret = os.Getenv("STASH_ACCESS_SECRET")
+	hookKey = os.Getenv("STASH_HOOK")
 
 	switch {
 	case len(testURL) == 0:
@@ -50,6 +52,8 @@ func init() {
 		panic(errors.New("must set the STASH_ACCESS_TOKEN environment variable"))
 	case len(accessSecret) == 0:
 		panic(errors.New("must set the STASH_ACCESS_SECRET environment variable"))
+	case len(hookKey) == 0:
+		panic(errors.New("must set the STASH_HOOK environment variable"))
 	}
 
 	client = New(

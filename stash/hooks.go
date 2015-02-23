@@ -24,7 +24,7 @@ type HookResource struct {
 }
 
 // Enable hook for named repository
-func (r *RepoResource) CreateHook(project, slug, hook_key, link string) (*Hook, error) {
+func (r *HookResource) CreateHook(project, slug, hook_key, link string) (*Hook, error) {
 	hookConfig := map[string]string{"url": link}
 	values, err := json.Marshal(hookConfig)
 	if err != nil {
@@ -50,7 +50,7 @@ func (r *RepoResource) CreateHook(project, slug, hook_key, link string) (*Hook, 
 }
 
 // Disable hook for named repository
-func (r *RepoResource) DeleteHook(project, slug, hook_key, link string) error {
+func (r *HookResource) DeleteHook(project, slug, hook_key, link string) error {
 	hookConfig := map[string]string{"url": link}
 	values, err := json.Marshal(hookConfig)
 	if err != nil {
