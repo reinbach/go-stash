@@ -42,6 +42,12 @@ Step 2
 Setup Enviroment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+If you do not have the `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET`, you can set those up with the following command;
+
+    make auth
+
+Follow the instructions provided and you will be provided with `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET` values that you can use.
+
     export STASH_URL="<stash_url>"
     export STASH_PROJECT="<stash_project>"
     export STASH_REPO="<stash_repo>"
@@ -50,3 +56,5 @@ Setup Enviroment Variables
     export STASH_CONSUMER_KEY="<consumer_key>"
     export STASH_HOOK="de.aeffle.stash.plugin.stash-http-get-post-receive-hook"
     export STASH_PRIVATE_KEY="<stash_private_key>"
+    export STASH_ACCESS_TOKEN="<stash_access_token>"
+    export STASH_ACCESS_SECRET="<stash_access_secret>"
