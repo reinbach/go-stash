@@ -10,7 +10,7 @@ Initially to provide Stash support to [drone.io](https://github.com/drone/drone)
 ### Setup Stash
 
 One way to get that up and running is to make use of the atlassian/stash docker
-(atlassian/stash)(https://registry.hub.docker.com/u/atlassian/stash/)
+[atlassian/stash](https://registry.hub.docker.com/u/atlassian/stash/)
 
 If you use the above Stash instance, then access the Stash instance at `http://localhost:7990/` and following the setup instructions.
 
@@ -26,23 +26,23 @@ In Administration Add-On section install the `HTTP Request Post-Receive Hook for
 
 In Administration Settings section, configure an Application Link.
 
-Step 1
+#### Step 1.
 
     Application Name: go-stash
     Application Type: Generic Application
     Create Incoming Link: checked
 
-Step 2
+#### Step 2.
 
     Consumer Key: <consumer_key>
     Consumer Name: <consumer_name>
     Public Key: <public_key>
 
 
-Setup Enviroment Variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+#### Setup Enviroment Variables
 
 If you do not have the `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET`, you can set those with the `make auth` command.
+
 Follow the instructions provided and you will be provided with `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET` values that you can then use.
 
 
