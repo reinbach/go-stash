@@ -42,7 +42,9 @@ Step 2
 Setup Enviroment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you do not have the `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET`, you can set those with the `make auth` command. Follow the instructions provided and you will be provided with `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET` values that you can then use.
+If you do not have the `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET`, you can set those with the `make auth` command.
+Follow the instructions provided and you will be provided with `STASH_ACCESS_TOKEN` and `STASH_ACCESS_SECRET` values that you can then use.
+
 
     export STASH_URL="<stash_url>"
     export STASH_PROJECT="<stash_project>"
