@@ -3,6 +3,7 @@ package stash
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type Key struct {
@@ -43,7 +44,7 @@ func (r *KeyResource) Find(key string) (*Key, error) {
 	}
 
 	for _, k := range keys.Values {
-		if k.Text == key {
+		if strings.TrimSpace(k.Text) == key {
 			return &k, nil
 		}
 	}
